@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dialog test</title>
+    <!-- <link rel="stylesheet" href="pure-min.css" /> -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css"
+    />
+    <script src="./jquery.min.js"></script>
+    <style>
+      body {
+        min-width: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bill Calculator</h1>
+    <table id="table">
+      <thead>
+        <tr>
+          <th>Customer Id</th>
+          <th>Amount</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <th id="total">0</th>
+        </tr>
+      </tfoot>
+    </table>
+    <button type="button" id="clear">🗑️ Delete All</button>
+    <script src="popup.js"></script>
+  </body>
+</html>
