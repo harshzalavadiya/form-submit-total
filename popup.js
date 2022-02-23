@@ -1,24 +1,31 @@
-const ls = localStorage;
+let getFromStorage = () =>
+  new Promise((resolve, _reject) =>
+    chrome.storage.sync.get(["billdb"], ({ billdb }) => {
+      resolve(JSON.parse(billdb));
+    })
+  );
 
-function stGet() {
-  return JSON.parse(ls.getItem("dbx") || "{}");
-}
+async function stDeleteIndex(key) {
+  const db = await getFromStorage();
 
-function stPush(newItem) {
-  ls.setItem("dbx", JSON.stringify({ ...stGet(), ...newItem }));
-}
-
-function stDeleteIndex(key) {
-  let { [key]: x, ...newSt } = stGet();
-  ls.setItem("dbx", JSON.stringify(newSt));
+  chrome.storage.sync.set(
+    {
+      billdb: JSON.stringify({ ...db, [key]: undefined }),
+    },
+    () => {
+      updateTable();
+    }
+  );
 }
 
 function stClear() {
-  ls.setItem("dbx", "{}");
+  chrome.storage.sync.set({
+    billdb: "{}",
+  });
 }
 
-function updateTable() {
-  const db = stGet();
+async function updateTable() {
+  const db = await getFromStorage();
 
   let newBody = "";
   let total = 0;
@@ -36,15 +43,7 @@ function updateTable() {
   $("#total").empty().html(total);
 }
 
-function updatePopup() {
-  chrome.storage.sync.get(["data"], function ({ data }) {
-    stPush(data);
-    updateTable();
-    chrome.storage.sync.set({ data: {} });
-  });
-}
-
-document.addEventListener("DOMContentLoaded", updatePopup);
+document.addEventListener("DOMContentLoaded", updateTable);
 
 $("#clear").click(function () {
   stClear();
@@ -54,19 +53,4 @@ $("#clear").click(function () {
 $(document).on("click", ".delete-item", function () {
   const idx = $(this).data("id");
   stDeleteIndex(idx);
-  updateTable();
 });
-
-// // test
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   console.log(request.data);
-//   if (request.msg === "eb_form_submitted") {
-//     console.log(request.data);
-//     // //  To do something
-//     // console.log(request.data.subject);
-//     // console.log(request.data.content);
-
-//     stPush(request.data);
-//     updateTable();
-//   }
-// });
