@@ -10,7 +10,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       const k = custNumber.toString();
       const v = Number(custAmt.toString());
 
-      chrome.storage.sync.get("billdb", function ({ billdb }) {
+      chrome.storage.sync.get("billdb", function ({ billdb = "{}" }) {
         console.log(JSON.parse(billdb));
         chrome.storage.sync.set({
           billdb: JSON.stringify({ ...JSON.parse(billdb), [k]: v }),

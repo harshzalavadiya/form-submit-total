@@ -1,6 +1,6 @@
 let getFromStorage = () =>
   new Promise((resolve, _reject) =>
-    chrome.storage.sync.get(["billdb"], ({ billdb }) => {
+    chrome.storage.sync.get(["billdb"], ({ billdb = "{}" }) => {
       resolve(JSON.parse(billdb));
     })
   );
